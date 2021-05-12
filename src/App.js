@@ -18,6 +18,15 @@ const App = () => {
       setNotes(notes.map(note => note.id !== id ? note :res))
     })
   }
+
+  // 是否显示所有项
+  const [isShowAll,setShowAll] = useState(true)
+
+  const toggleShow = ()=>{
+    setShowAll(!isShowAll)
+  }
+
+  const showAll = isShowAll ? notes : notes.filter(note => note.important)
   const hook = () => {
     noteSevices.getAll().then(res => {
       setNotes(res)
@@ -42,13 +51,15 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
+      <button onClick={toggleShow}>是否显示所有项目</button>
+
       <form onSubmit={addNote}>
         <input value={newNote} onChange={noteChange} />
         <button type="submit">添加日记</button>
       </form>
       <ul>
         {
-          notes.map(note => <Note key={note.id} note={note} modify={()=>modify(note.id)}/>)
+          showAll.map(note => <Note key={note.id} note={note} modify={()=>modify(note.id)}/>)
         }
       </ul>
     </div>
